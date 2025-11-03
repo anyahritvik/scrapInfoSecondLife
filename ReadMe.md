@@ -1,4 +1,4 @@
-<h2 style:"color:red"> WIP 🙂</h2>
+## Fixed Profile Picture Loading, Age and Birthdate fetching....📅
 # Second Life Profile Viewer
 
 A web application to view Second Life resident profiles with detailed age calculations and profile information.
