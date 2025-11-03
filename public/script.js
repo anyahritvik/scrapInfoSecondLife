@@ -22,6 +22,8 @@ document.getElementById("fetchBtn").onclick = async function () {
         // Format the age details
         const ageDetails = p.ageDetails ? `
             <div class="age-details">
+                <div class="detail"><span>Years:</span> ${p.ageDetails.years}</div>
+                <div class="detail"><span>Months:</span> ${p.ageDetails.months}</div>
                 <div class="detail"><span>Birth Date:</span> ${p.ageDetails.birthDate}</div>
                 <div class="detail"><span>Current Date:</span> ${p.ageDetails.currentDate}</div>
             </div>

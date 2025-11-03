@@ -1,17 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Second Life Avatar Profile Viewer</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Second Life Profile Viewer</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="app">
-    <h1>Second Life Avatar Profile Viewer</h1>
-    <input type="text" id="uuidInput" placeholder="Enter UUID or username">
-    <button id="fetchBtn">Fetch Profile</button>
-    <div id="result"></div>
-  </div>
-  <script src="script.js"></script>
+    <div class="app">
+        <h1>Second Life Profile Viewer</h1>
+        <div class="search-container">
+            <input type="text" id="uuidInput" placeholder="Enter UUID or username">
+            <button id="fetchBtn">Fetch Profile</button>
+        </div>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const DEFAULT_PROFILE_URL = "https://example.com/default-profile.png";
+        
+        document.getElementById("fetchBtn").onclick = async function () {
+            const uuidOrName = document.getElementById("uuidInput").value.trim();
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = "<div class='loading'>Loading...</div>";
+
+            if (!uuidOrName) {
+                resultDiv.innerHTML = "<span class='error'>Please enter a UUID or username.</span>";
+                return;
+            }
+
+            try {
+                const resp = await fetch(`/api/profile/${encodeURIComponent(uuidOrName)}`);
+                const data = await resp.json();
+                
+                if (!data.success) {
+                    resultDiv.innerHTML = `<span class="error">${data.error}</span>`;
+                    return;
+                }
+
+                const p = data.profile;
+
+                // Format age display with exact days
+                const ageDisplay = p.ageDetails ? 
+                    `${p.ageDetails.exact.years} years, ${p.ageDetails.exact.months} months (${p.ageDetails.exact.days} Days)` : 
+                    'Unknown';
+
+                resultDiv.innerHTML = `
+                    <div class="profile-card">
+                        <div class="profile-header">
+                            <img class="profile-img" src="${p.profileImage}" alt="Avatar Image" onerror="this.src='${DEFAULT_PROFILE_URL}'">
+                            <div class="profile-info">
+                                <h2 class="profile-name">${p.displayName || "(unknown)"}</h2>
+                                ${p.username ? `<div class="username">${p.username}</div>` : ''}
+                            </div>
+                        </div>
+                        
+                        <div class="profile-body">
+                            <div class="info-section">
+                                <h3>Resident Details</h3>
+                                <div class="info"><strong>UUID:</strong> ${p.uuid}</div>
+                                <div class="info"><strong>Born:</strong> ${p.birthInfo}</div>
+                                <div class="info"><strong>Age:</strong> ${ageDisplay}</div>
+                            </div>
+
+                            ${p.description ? `
+                                <div class="info-section">
+                                    <h3>Description</h3>
+                                    <p>${p.description}</p>
+                                </div>
+                            ` : ''}
+
+                            ${p.links ? `
+                                <div class="profile-links">
+                                    ${p.links.webProfile ? `<a href="${p.links.webProfile}" class="profile-link">Web Profile</a>` : ''}
+                                    ${p.links.clientProfile ? `<a href="${p.links.clientProfile}" class="profile-link">Client Profile</a>` : ''}
+                                </div>
+                            ` : ''}
+
+                            <div class="metadata">
+                                <p>Fetched: ${data.metadata.fetchedAt}</p>
+                                <p>Version: ${data.version}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } catch (err) {
+                resultDiv.innerHTML = `<span class="error">Failed to load profile: ${err.message}</span>`;
+            }
+        };
+    </script>
 </body>
 </html>

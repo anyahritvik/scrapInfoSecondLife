@@ -7,8 +7,9 @@ const app = express();
 const PORT = 3000;
 
 // Current UTC time and user from your system
-const CURRENT_UTC = "2025-11-03 21:41:19";
+const CURRENT_UTC = "2025-11-03 22:31:33";
 const CURRENT_USER = "anyahritvik";
+const DEFAULT_PROFILE_URL = "https://example.com/default-profile.png";
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
@@ -26,7 +27,9 @@ function formatDate(dateStr) {
 }
 
 function calculateExactAge(birthDateStr) {
-    const birthDate = new Date(birthDateStr);
+    // Parse the birth date from DD-MM-YYYY format
+    const [day, month, year] = birthDateStr.split('-');
+    const birthDate = new Date(year, month - 1, day);
     const currentDate = new Date(CURRENT_UTC);
     
     let years = currentDate.getFullYear() - birthDate.getFullYear();
@@ -37,10 +40,16 @@ function calculateExactAge(birthDateStr) {
         months += 12;
     }
 
+    // Calculate total days
+    const diffTime = Math.abs(currentDate - birthDate);
+    const totalDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
     return {
         years,
         months,
-        formatted: `${years} years, ${months} months`
+        days: totalDays,
+        formatted: `${years} years, ${months} months (${totalDays} Days)`,
+        exactDays: totalDays
     };
 }
 
@@ -78,12 +87,8 @@ app.get('/api/profile/:uuid', async (req, res) => {
         };
 
         // Get profile image
-        const imageUrl = $('meta[property="og:image"]').attr('content') || 
-                        $('#main-photo').attr('src') ||
-                        $('img.profile_photo').attr('src');
-        if (imageUrl) {
-            profileData.profile.profileImage = imageUrl;
-        }
+        const imageElement = $('#content div.img img[class="parcelimg"]');
+        profileData.profile.profileImage = imageElement.attr('src') || DEFAULT_PROFILE_URL;
 
         // Get display name
         const residentElement = $('.details h1.resident span').first();
@@ -106,32 +111,33 @@ app.get('/api/profile/:uuid', async (req, res) => {
         if (infoElement.length) {
             const syscatSpan = infoElement.find('span.syscat');
             if (syscatSpan.text().trim() === 'Resident Since:') {
-                // Get the text content after the span
                 let infoText = infoElement.contents()
-                    .filter((_, el) => el.nodeType === 3) // Get text nodes only
+                    .filter((_, el) => el.nodeType === 3)
                     .text()
                     .trim();
-                
-                // Extract the date and age parts
-                const dateMatch = infoText.match(/(\d{4}-\d{2}-\d{2})/);
-                let ageText = infoText.replace(/(\d{4}-\d{2}-\d{2})/, '').trim();
-                
-                // Remove parentheses and "ago"
-                ageText = ageText.replace(/^\(|\)$|ago$/g, '').trim();
 
+                const dateMatch = infoText.match(/(\d{4}-\d{2}-\d{2})/);
                 if (dateMatch) {
                     const birthDate = dateMatch[1];
-                    profileData.profile.birthInfo = formatDate(birthDate);
-                    profileData.profile.ageInfo = ageText;
+                    const [year, month, day] = birthDate.split('-');
+                    const formattedBirthDate = `${day}-${month}-${year}`;
+                    profileData.profile.birthInfo = formattedBirthDate;
 
-                    // Calculate exact age
-                    const calculatedAge = calculateExactAge(birthDate);
+                    // Calculate exact age with days
+                    const calculatedAge = calculateExactAge(formattedBirthDate);
+                    profileData.profile.ageInfo = calculatedAge.formatted;
                     
                     profileData.profile.ageDetails = {
-                        exact: calculatedAge,
-                        birthDate: formatDate(birthDate),
+                        exact: {
+                            years: calculatedAge.years,
+                            months: calculatedAge.months,
+                            days: calculatedAge.days,
+                            formatted: calculatedAge.formatted
+                        },
+                        birthDate: formattedBirthDate,
                         currentDate: formatDate(CURRENT_UTC.split(' ')[0]),
-                        originalText: `${formatDate(birthDate)} (${calculatedAge.formatted})`
+                        originalText: calculatedAge.formatted,
+                        exactDays: calculatedAge.days
                     };
                 }
             }
@@ -146,6 +152,7 @@ app.get('/api/profile/:uuid', async (req, res) => {
             };
         }
 
+        profileData.version = "v1";
         res.json(profileData);
 
     } catch (err) {
@@ -158,23 +165,10 @@ app.get('/api/profile/:uuid', async (req, res) => {
                 errorType: err.name,
                 url: url,
                 errorStack: process.env.NODE_ENV === 'development' ? err.stack : undefined
-            }
+            },
+            version: "v1"
         });
     }
-});
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-    console.error('Server Error:', err);
-    res.status(500).json({
-        success: false,
-        error: 'Internal Server Error',
-        metadata: {
-            timestamp: CURRENT_UTC,
-            user: CURRENT_USER,
-            errorDetails: process.env.NODE_ENV === 'development' ? err : undefined
-        }
-    });
 });
 
 app.listen(PORT, () => {

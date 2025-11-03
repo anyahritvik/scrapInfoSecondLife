@@ -1,135 +1,158 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-  font-family: Arial, sans-serif;
-  background: #232946;
-  color: #fff;
-  margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background: #232946;
+    color: #fff;
+    line-height: 1.6;
 }
+
 .app {
-  margin: 60px auto;
-  max-width: 450px;
-  padding: 32px;
-  background: #1a1a2e;
-  border-radius: 10px;
-  box-shadow: 0 2px 20px #0007;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
 }
+
 h1 {
-  margin-bottom: 18px;
-  color: #eebbc3;
+    color: #eebbc3;
+    margin-bottom: 30px;
+    text-align: center;
 }
-input[type="text"] {
-  width: 80%;
-  padding: 10px;
-  border: none;
-  border-radius: 3px;
-  margin-right: 7px;
-  font-size: 16px;
+
+.search-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
 }
+
+input {
+    flex: 1;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
 button {
-  background: #eebbc3;
-  color: #232946;
-  padding: 10px 18px;
-  border: none;
-  border-radius: 3px;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background 0.2s;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    background: #eebbc3;
+    color: #232946;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
+
 button:hover {
-  background: #fff;
-  color: #232946;
+    background: #fff;
+    transform: translateY(-2px);
 }
-#result {
-  margin-top: 32px;
-  min-height: 60px;
-}
-.profile-img {
-  border-radius: 50%;
-  margin-bottom: 8px;
-  max-width: 120px;
-  max-height: 120px;
-  display: block;
-}
-.info {
-  margin-bottom: 7px;
-}
-.error {
-  color: #ff6f91;
-  font-weight: bold;
-}
-/* ... (previous CSS remains the same) ... */
 
 .profile-card {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-    padding: 20px;
-    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 25px;
+    backdrop-filter: blur(10px);
 }
 
 .profile-header {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
+    gap: 20px;
+    margin-bottom: 25px;
 }
 
 .profile-img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    margin-right: 20px;
+    width: 120px;
+    height: 120px;
+    border-radius: 60px;
     object-fit: cover;
+    border: 3px solid #eebbc3;
 }
 
-.profile-name {
-    margin: 0;
+.profile-info h2 {
     color: #eebbc3;
-    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.username {
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .info-section {
-    margin-bottom: 20px;
-    padding: 15px;
     background: rgba(0, 0, 0, 0.2);
-    border-radius: 6px;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
 }
 
 .info-section h3 {
-    margin: 0 0 10px 0;
     color: #eebbc3;
-    font-size: 18px;
+    margin-bottom: 15px;
 }
 
-.age-details {
-    margin-top: 10px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+.info {
+    margin-bottom: 10px;
+}
+
+.info strong {
+    color: #eebbc3;
+    margin-right: 10px;
+}
+
+.profile-links {
+    display: flex;
     gap: 10px;
+    margin-bottom: 20px;
 }
 
-.detail {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 8px;
-    border-radius: 4px;
+.profile-link {
+    padding: 8px 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.3s ease;
 }
 
-.detail span {
-    color: #eebbc3;
-    font-weight: bold;
+.profile-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.metadata {
+    font-size: 0.9em;
+    color: rgba(255, 255, 255, 0.5);
+    text-align: right;
+}
+
+.error {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.1);
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
 }
 
 .loading {
     text-align: center;
     color: #eebbc3;
     padding: 20px;
+    animation: pulse 1.5s infinite;
 }
 
-/* Animation for loading state */
 @keyframes pulse {
     0% { opacity: 0.6; }
     50% { opacity: 1; }
     100% { opacity: 0.6; }
-}
-
-.loading {
-    animation: pulse 1.5s infinite;
 }
