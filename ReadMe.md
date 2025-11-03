@@ -9,7 +9,7 @@ A web application to view Second Life resident profiles with detailed age calcul
 
 ## Project Structure
 ```
-your-project/
+scrapInfoSecondLife/
 ├── server.js         # Express server and profile data extraction
 ├── package.json      # Project dependencies
 ├── README.md         # This documentation
