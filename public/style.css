@@ -1,0 +1,135 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #232946;
+  color: #fff;
+  margin: 0;
+}
+.app {
+  margin: 60px auto;
+  max-width: 450px;
+  padding: 32px;
+  background: #1a1a2e;
+  border-radius: 10px;
+  box-shadow: 0 2px 20px #0007;
+}
+h1 {
+  margin-bottom: 18px;
+  color: #eebbc3;
+}
+input[type="text"] {
+  width: 80%;
+  padding: 10px;
+  border: none;
+  border-radius: 3px;
+  margin-right: 7px;
+  font-size: 16px;
+}
+button {
+  background: #eebbc3;
+  color: #232946;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 3px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.2s;
+}
+button:hover {
+  background: #fff;
+  color: #232946;
+}
+#result {
+  margin-top: 32px;
+  min-height: 60px;
+}
+.profile-img {
+  border-radius: 50%;
+  margin-bottom: 8px;
+  max-width: 120px;
+  max-height: 120px;
+  display: block;
+}
+.info {
+  margin-bottom: 7px;
+}
+.error {
+  color: #ff6f91;
+  font-weight: bold;
+}
+/* ... (previous CSS remains the same) ... */
+
+.profile-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 20px;
+    object-fit: cover;
+}
+
+.profile-name {
+    margin: 0;
+    color: #eebbc3;
+    font-size: 24px;
+}
+
+.info-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+}
+
+.info-section h3 {
+    margin: 0 0 10px 0;
+    color: #eebbc3;
+    font-size: 18px;
+}
+
+.age-details {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+}
+
+.detail {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.detail span {
+    color: #eebbc3;
+    font-weight: bold;
+}
+
+.loading {
+    text-align: center;
+    color: #eebbc3;
+    padding: 20px;
+}
+
+/* Animation for loading state */
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+.loading {
+    animation: pulse 1.5s infinite;
+}
