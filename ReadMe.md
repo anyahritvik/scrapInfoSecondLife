@@ -70,7 +70,7 @@ Current User: anyahritvik
 
 ## Using the Application
 
-1. Enter a Second Life UUID or username in the search box
+1. Enter a Second Life UUID in the search box
 2. Click "Fetch Profile" to retrieve the profile information
 3. View the displayed information:
    - Profile picture
@@ -99,7 +99,7 @@ Current User: anyahritvik
 ## Error Handling
 
 The application handles various error cases:
-- Invalid UUID/username
+- Invalid UUID
 - Network errors
 - Missing profile information
 - Failed image loading (uses default image)
